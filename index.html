@@ -583,16 +583,20 @@ document.querySelectorAll('a[href="https://docs.google.com/forms/d/e/1FAIpQLScCD
 document.querySelectorAll('a[href="https://line.me/R/ti/p/@294nobep"]').forEach(a => a.href = LINE_URL);
 
 // ===== 前後台切換 =====
-// ===== Supabase SDK =====
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ===== Supabase SDK & 後台切換 =====
+window.addEventListener('load', function() {
+  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+  window._sb = supabaseClient;
+
+  if (new URLSearchParams(window.location.search).get('admin') === 'true') {
+    document.getElementById('frontend').classList.add('hidden');
+    document.getElementById('admin').classList.add('active');
+    loadAdmin();
+  }
+});
 
 function isAdmin() {
   return new URLSearchParams(window.location.search).get('admin') === 'true';
-}
-if (isAdmin()) {
-  document.getElementById('frontend').classList.add('hidden');
-  document.getElementById('admin').classList.add('active');
-  loadAdmin();
 }
 
 // ===== 後台Tab切換 =====
@@ -604,7 +608,7 @@ function switchTab(name) {
 }
 
 async function sbFetch(table, orderParam = '') {
-  let query = supabase.from(table).select('*');
+  const sb = window._sb; if(!sb) throw new Error("Supabase未載入"); let query = sb.from(table).select('*');
   if (orderParam.includes('created_at.desc')) {
     query = query.order('created_at', { ascending: false });
   } else if (orderParam.includes('name.asc')) {
@@ -616,7 +620,7 @@ async function sbFetch(table, orderParam = '') {
 }
 
 async function sbPatch(table, id, data) {
-  const { error } = await supabase.from(table).update(data).eq('id', id);
+  const sb = window._sb; if(!sb) throw new Error("Supabase未載入"); const { error } = await sb.from(table).update(data).eq('id', id);
   if (error) throw error;
 }
 
