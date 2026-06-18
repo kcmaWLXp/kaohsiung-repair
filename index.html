@@ -583,6 +583,9 @@ document.querySelectorAll('a[href="https://docs.google.com/forms/d/e/1FAIpQLScCD
 document.querySelectorAll('a[href="https://line.me/R/ti/p/@294nobep"]').forEach(a => a.href = LINE_URL);
 
 // ===== 前後台切換 =====
+// ===== Supabase SDK =====
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 function isAdmin() {
   return new URLSearchParams(window.location.search).get('admin') === 'true';
 }
@@ -599,9 +602,6 @@ function switchTab(name) {
   document.getElementById('tab-' + name).classList.add('active');
   event.target.classList.add('active');
 }
-
-// ===== Supabase SDK =====
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function sbFetch(table, orderParam = '') {
   let query = supabase.from(table).select('*');
