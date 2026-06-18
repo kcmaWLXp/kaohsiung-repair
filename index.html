@@ -634,7 +634,7 @@ const statusMap = {
 
 // ===== 載入後台資料 =====
 async function loadAdmin() {
-  if (SUPABASE_URL === 'https://erdptaznlrertrkqeao.supabase.co') {
+  if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
     document.getElementById('ordersTable').innerHTML = '<p style="color:var(--orange);padding:20px;">⚠️ 請先在程式碼中填入 SUPABASE_URL 和 SUPABASE_KEY</p>';
     document.getElementById('partnersTable').innerHTML = '<p style="color:var(--orange);padding:20px;">⚠️ 請先在程式碼中填入 SUPABASE_URL 和 SUPABASE_KEY</p>';
     document.getElementById('totalOrders').textContent = '?';
